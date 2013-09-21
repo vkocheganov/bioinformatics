@@ -18,8 +18,18 @@
 # 	g++ -Wall -g pattern_matching_problem.cpp -o pattern_matching_problem
 # run:
 # 	./pattern_matching_problem
-all: clump_finding_problem run
-clump_finding_problem: clump_finding_problem.cpp
-	g++ -Wall -g clump_finding_problem.cpp -o clump_finding_problem
+# all: clump_finding_problem run
+# clump_finding_problem: clump_finding_problem.cpp
+# 	g++ -Wall -g clump_finding_problem.cpp -o clump_finding_problem
+# run:
+# 	./clump_finding_problem
+# all: minimum_skew_problem run
+# minimum_skew_problem: minimum_skew_problem.cpp
+# 	g++ -Wall -g minimum_skew_problem.cpp -o minimum_skew_problem
+# run:
+# 	./minimum_skew_problem
+all: approximate_pattern_matching_problem run
+approximate_pattern_matching_problem: approximate_pattern_matching_problem.cpp
+	g++ -Wall -g approximate_pattern_matching_problem.cpp -o approximate_pattern_matching_problem
 run:
-	./clump_finding_problem
+	./approximate_pattern_matching_problem

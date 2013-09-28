@@ -4,49 +4,42 @@
 
 using namespace std;
 
-int main ()
+void skew_min(string inputString, vector<int>& outputMinPoints, bool needOutputFile)
 {
-    ifstream file("/home/maths/Downloads/stepic_dataset.txt");
-    if (file.is_open())
+    int min = 0;
+    int func = 0;
+    ofstream file;
+
+    if (needOutputFile)
     {
-        string line;//("TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT");
-        vector<int> min_ind;
-        // if (getline(file,pattern))
-        // {
-        //     cout << "got pattern " << pattern<< endl;
-        // }
-        int min = 0;
-        int func = 0;
-        if (getline(file,line))
+        file.open("/home/maths/Documents/bioinf/skew_out.txt");
+    }
+    
+    for (int i = 0; i < inputString.length(); i++)
+    {
+        if (inputString[i] == 'C' || inputString[i] == 'c')
+            func--;
+        else if (inputString[i] == 'G' || inputString[i] == 'g')
+            func++;
+        if (needOutputFile)
         {
-//            cout << "got line " <<  " of size "<<line.length()<< endl;
-        }
-        for (int i = 0; i < line.length(); i++)
-        {
-            if (line[i] == 'C' || line[i] == 'c')
-                func--;
-            else if (line[i] == 'G' || line[i] == 'g')
-                func++;
-            if (func == min)
+            if (i%10000 == 0)
             {
-                min_ind.push_back(i);
+                file<<func<<" ";
             }
-            if (func < min)
-            {
-                min_ind.erase(min_ind.begin(), min_ind.end());
-                min = func;
-                min_ind.push_back(i);
-            }
-        }
-        cout << "min = " << min << endl;
-        for (int i = 0; i < min_ind.size(); i++)
-        {
-            cout << min_ind[i] << " ";
         }
         
+        if (func == min)
+        {
+            outputMinPoints.push_back(i);
+        }
+        if (func < min)
+        {
+            outputMinPoints.erase(outputMinPoints.begin(), outputMinPoints.end());
+            min = func;
+            outputMinPoints.push_back(i);
+        }
     }
-    else
-    {
-        cout<<"Error opening file"<<endl;
-    }
+    if (needOutputFile)
+        file<<endl;
 }

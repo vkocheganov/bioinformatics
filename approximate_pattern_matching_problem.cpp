@@ -7,126 +7,162 @@
 using namespace std;
 
 const char nucl[] = {'A', 'C', 'G', 'T'};
-    
-int main ()
+
+void generate_comb(int n, int k, vector<int>& combinations)
 {
-    ifstream file("/home/maths/Downloads/stepic_dataset.txt");
-    if (file.is_open())
+    unsigned int singleCombination = 0;
+    int cur_ind;
+    unsigned  mask = 1;
+    int count = 0;
+
+    for (int i = 0; i < k; i ++)
     {
-        string pattern, line;
-        int d;
-        set<string> pattern_ar;
-        if (getline(file,pattern))
+        singleCombination |= mask;
+        cout <<mask<<endl;
+        mask<<=1;
+    }
+        
+    while (1)
+    {
+        combinations.push_back(singleCombination);
+        count++;
+        cur_ind = n - 1;
+        while ( singleCombination & (1<<cur_ind))
         {
-            cout << "got pattern " << pattern<< endl;
+            singleCombination = singleCombination & ~(1<<cur_ind);
+            cur_ind--;
         }
-        if (getline(file,line))
+        
+        if (cur_ind < n - k)
+            break;
+        int pos = cur_ind;
+        while ((~singleCombination) & (1<<pos))
         {
-            cout << "got line " <<  " of size "<<line.length()<< endl;
+            pos--;
         }
-        file >> d;
-        {
-            cout << "got d " <<d<< endl;
-        }
-        int* indices = new int[d];
-        int* indices_1 = new int[d];
+        singleCombination &= ~(1<<pos);
+        for (int i = pos + 1; i < pos + 1 + n - cur_ind; i++)
+            singleCombination |= 1<<i;
+    }
+}
 
-        // int count = 0,
-        //     count1 = 0;
-        string temp;
-        for (int j = 0; j < d; j++)
+void approximate_pattern_matching(string inputPattern, string inputString, int inputD, vector<int>& outputPoss)
+{
+    if (inputPattern.length() > 15)
+    {
+        cout<<"Error: pattern should be of length <= 15"<<endl;
+        return ;
+    }
+
+    vector<int> comb;
+    generate_comb(inputPattern.length(),inputD,comb);
+    string temp;
+    set<string> pattern_ar;
+    int errcount;
+    
+    for (vector<int>::iterator it = comb.begin(); it != comb.end(); it++ )
+    {
+        for (unsigned i = 0; i < 1<<(2*inputD); i++)
         {
-            indices[j] = j;
+            temp = inputPattern;
+            errcount = 0;
+            for (int j = 0; j < inputPattern.length();j++)
+            {
+                if (*it & (1<<j))
+                {
+                    temp[j] = nucl[((3 <<(2*errcount)) & i) >>(2*errcount)];
+                    errcount++;
+                }
+            }
+            pattern_ar.insert(temp);
+        }
+    }
+    set <string>::iterator it = pattern_ar.begin();
+    for (int i = 0; i < inputString.length() - inputPattern.length() + 1; i++)
+    {
+        for (it = pattern_ar.begin(); it !=  pattern_ar.end(); it++)
+        {
+            temp = *it;
+            if (inputString.compare(i,temp.length(),temp) == 0)
+            {
+                cout<<i<<endl;
+                outputPoss.push_back(i);
+            }
+
+        }
+    }
+}    
+
+
+void approximate_pattern_matching1(string inputPattern, string inputString, int inputD, vector<int>& outputPoss)
+{
+    vector<int> comb;
+    generate_comb(10,7,comb);
+    int* indices = new int[inputD];
+    int* indices_1 = new int[inputD];
+    string temp;
+    set<string> pattern_ar;
+    for (int j = 0; j < inputD; j++)
+    {
+        indices[j] = j;
+    }
+
+    while (1)
+    {
+        int cur_ind = inputD - 1;
+        for (int j = 0; j < inputD; j++)
+        {
+            indices_1[j] = 0;
         }
 
-        int cur_ind = d - 1;
         while (1)
         {
-//            count++;
-
-            // for (int j = 0; j < d; j++)
-            // {
-            //     cout << indices[j] << " ";
-            // }
-            // cout <<endl;
-            cur_ind = d - 1;
-//            cout<<"count1 = "<<count1<<endl;
-            for (int j = 0; j < d; j++)
+            temp = inputPattern;
+            for (int i = 0; i <inputD;i++)
             {
-                indices_1[j] = 0;
+                temp[indices[i]] = nucl[indices_1[i]];
             }
-
-            while (1)
-            {
-                temp = pattern;
-//                cout<< "temp = "<< temp<<endl;
-//                cout << "ind_1 = ";
-                for (int i = 0; i <d;i++)
-                {
-//                    cout<<indices_1[i]<<" ";
-                    temp[indices[i]] = nucl[indices_1[i]];
-                }
-//                cout<<endl;
-//                cout<< "temp = "<< temp<<endl;
-//                count1++;
-                pattern_ar.insert(temp);
-                cur_ind = d - 1;
-                while( cur_ind >=0 && (indices_1[cur_ind] == 3) )
-                {
-                    cur_ind--;
-                }
-                if (cur_ind < 0)
-                    break;
-                indices_1[cur_ind]++;
-                cur_ind++;
-                for (int i = cur_ind; i < d; i++)
-                    indices_1[i] = 0;
-            }
-            
-            for (int i = 0; i < 4; i ++)
-            {
-            }
-
-            cur_ind = d - 1;
-            while ( (indices[cur_ind] == pattern.length() -1 + cur_ind - d + 1 ) && (cur_ind >= 0))
+            pattern_ar.insert(temp);
+            cur_ind = inputD - 1;
+            while( cur_ind >=0 && (indices_1[cur_ind] == 3) )
             {
                 cur_ind--;
             }
             if (cur_ind < 0)
                 break;
-            indices[cur_ind]++;
+            indices_1[cur_ind]++;
             cur_ind++;
-            while (cur_ind < d)
-            {
-                indices[cur_ind] = indices[cur_ind - 1] + 1;
-                cur_ind++;
-            }
+            for (int i = cur_ind; i < inputD; i++)
+                indices_1[i] = 0;
         }
-//        cout << "count1 "<< count1<<endl;
-        cout << "pat count = " << pattern_ar.size()<<endl;
-        set <string,int>::iterator it = pattern_ar.begin();
-        cout << "pat count = " << pattern_ar.size()<<endl;
-        for (int i = 0; i < line.length() - pattern.length() + 1; i++)
-        {
-            // if (i % 1000 == 0)
-            // {
-                
-            //     cout <<"i = "<<i<<endl;
-            // }
             
-            for (it = pattern_ar.begin(); it !=  pattern_ar.end(); it++)
-            {
-                temp = *it;
-                if (line.compare(i,temp.length(),temp) == 0)
-                {
-                    cout <<i<<" ";
-                }
-
-            }
+        cur_ind = inputD - 1;
+        while ( (indices[cur_ind] == inputPattern.length() -1 + cur_ind - inputD + 1 ) && (cur_ind >= 0))
+        {
+            cur_ind--;
+        }
+        if (cur_ind < 0)
+            break;
+        indices[cur_ind]++;
+        cur_ind++;
+        while (cur_ind < inputD)
+        {
+            indices[cur_ind] = indices[cur_ind - 1] + 1;
+            cur_ind++;
         }
     }
-    else
+    set <string,int>::iterator it = pattern_ar.begin();
+    cout << "pat count = " << pattern_ar.size()<<endl;
+    for (int i = 0; i < inputString.length() - inputPattern.length() + 1; i++)
     {
-        cout<<"Error opening file"<<endl;
+        for (it = pattern_ar.begin(); it !=  pattern_ar.end(); it++)
+        {
+            temp = *it;
+            if (inputString.compare(i,temp.length(),temp) == 0)
+            {
+                outputPoss.push_back(i);
+            }
+
+        }
     }
-}
+}    

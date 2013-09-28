@@ -1,15 +1,24 @@
 #include <iostream>
 #include <stdlib.h>
 #include <map>
+#include <vector>
+#include "main.h"
 
 using namespace std;
 
 void dna_rna_transcribe(string inputString, string& outputString)
 {
+    outputString.clear();
     for (unsigned i = 0; i < inputString.length(); i++)
     {
         if (inputString[i] == 'T')
-            inputString[i] = 'U';
+        {
+            outputString.append(1,'U');
+        }
+        else
+        {
+            outputString.append(1, inputString[i]);
+        }
     }
 }
 
@@ -93,15 +102,47 @@ void rna_amino_translate(string inputString, string& outputString)
     for (unsigned i = 0; i < inputString.length(); i +=3)
     {
         inputString.copy(buf, 3, i);
+        buf[3] = '\0';
         if (amino_map[buf] != '*')
             outputString.append(1,amino_map[buf]);
     }
 }
 
-
 void protein_translation(string inputString, string& outputString)
 {
-    dna_rna_transcribe(inputString, outputString);
-    rna_amino_translate(inputString, outputString);
+    string temp;
+    dna_rna_transcribe(inputString,temp);
+//    cout <<temp<<endl;
+    rna_amino_translate(temp, outputString);
+}
+
+void peptide_encoding(string inputDNA, string inputAmino, vector<string>& outputSubstrings)
+{
+//    cout<<inputDNA<<endl;
+    string peptide_from_DNA("");
+    string tempDNA(""), tempDNArev("");
+    for (int i = 0; i < inputDNA.length() - inputAmino.length()*3 + 1; i++)
+    {
+        if (i % 100000 == 0)
+            cout <<"i = "<<i<<endl;
+        tempDNA = string(inputDNA, i, inputAmino.length() * 3);
+        protein_translation(tempDNA, peptide_from_DNA);
+        if (peptide_from_DNA.compare(inputAmino) == 0)
+        {
+            outputSubstrings.push_back(tempDNA);
+//            cout <<tempDNA<<" "<<peptide_from_DNA<<endl;
+            continue;
+        }
+        
+        reverse_complement(tempDNA, tempDNArev);
+        peptide_from_DNA  = "";
+        protein_translation(tempDNArev, peptide_from_DNA);
+        if (peptide_from_DNA.compare(inputAmino) == 0)
+        {
+            outputSubstrings.push_back(tempDNA);
+//            cout <<tempDNA<<" "<<peptide_from_DNA<<endl;
+//            cout <<tempDNA<<endl;
+        }
+    }
 }
 

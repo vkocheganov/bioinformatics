@@ -18,14 +18,15 @@ int main ()
     if (file.is_open())
     {
         string line, pattern("CTTGATCAT"), temp;
-        // while( !file.eof() ) {
-        //     temp =file.get();
-        //     line.append(temp);
-        // }
-        
+        while( !file.eof() ) {
+            temp =file.get();
+            line.append(temp);
+        }
+        cout <<"length = "<< line.length()<<endl;
 //        cout<<line;
+//        getline(file,line);
 //        getline(file,pattern);
-        getline(file,line);
+        pattern = "VKLFPWFNGY";
         int d, k;
         // file>>k;
         // cout <<sizeof(int)+1<<endl;
@@ -58,15 +59,24 @@ int main ()
         // {
         //     cout<<*it<<endl;
         // }
-        string outputString;
-        protein_translation(line, outputString);
-        cout<<outputString<<endl;
+        // string outputString;
+        // protein_translation(line, outputString);
+        // cout<<outputString<<endl;
         // for (map<string,int>::iterator it = clumps.begin(); it != clumps.end(); it++)
         // {
         //     cout<<it->first<<" ";
         // }
         // cout<<endl;
 //        cout<<positions<<endl;
+        vector<string> substrings;
+        peptide_encoding(line,pattern,substrings);
+        cout <<"being "<<endl;
+        for (vector<string>::iterator it = substrings.begin(); it != substrings.end(); it++)
+        {
+            cout<<*it<<" ";
+        }
+
+        
         file.close();
     }
     else

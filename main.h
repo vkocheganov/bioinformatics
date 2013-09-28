@@ -12,3 +12,4 @@ void approximate_pattern_matching1(string inputPattern,string inputStrging,  int
 void generate_comb(int n, int k, vector<int>& combinations);
 void freq_words_with_mism(string inputString, int inputK, int inputD, vector<string>& outputMaxPat);
 void protein_translation(string inputString, string& outputString);
+void peptide_encoding(string inputDNA, string inputAmino, vector<string>& outputSubstrings);

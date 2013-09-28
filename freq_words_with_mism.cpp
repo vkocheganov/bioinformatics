@@ -19,7 +19,7 @@ void freq_words_with_mism(string inputString, int inputK, int inputD, vector<str
     vector<int> comb;
     generate_comb(inputK,inputD,comb);
 
-    for (int i = 0; i < inputString.length() - inputK + 1; i++)
+    for (unsigned i = 0; i < inputString.length() - inputK + 1; i++)
     {
         string pattern = string(inputString, i, inputK);
         string comp_pattern = pattern;
@@ -28,7 +28,7 @@ void freq_words_with_mism(string inputString, int inputK, int inputD, vector<str
         set<string> temp_set_comp;
         for (vector<int>::iterator it = comb.begin(); it != comb.end(); it++ )
         {
-            for (unsigned l = 0; l < 1<<(2*inputD); l++)
+            for (unsigned l = 0; l < (unsigned)1<<(2*inputD); l++)
             {
                 temp = pattern;
                 comp_temp = comp_pattern;

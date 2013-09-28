@@ -15,7 +15,7 @@ void skew_min(string inputString, vector<int>& outputMinPoints, bool needOutputF
         file.open("/home/maths/Documents/bioinf/skew_out.txt");
     }
     
-    for (int i = 0; i < inputString.length(); i++)
+    for (unsigned i = 0; i < inputString.length(); i++)
     {
         if (inputString[i] == 'C' || inputString[i] == 'c')
             func--;

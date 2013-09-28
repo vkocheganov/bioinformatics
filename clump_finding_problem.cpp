@@ -46,7 +46,7 @@ void clump_finding(string inputString, int inputK, int inputL, int inputT, map<s
         }
     }
 
-    for (int j = 1; j < inputString.length() - inputL + 1; j++)
+    for (unsigned j = 1; j < inputString.length() - inputL + 1; j++)
     {
         cur_line_c = line_c + j;
         buffer = cur_line_c - 1;

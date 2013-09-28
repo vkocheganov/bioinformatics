@@ -6,7 +6,7 @@ using namespace std;
 
 void dna_rna_transcribe(string inputString, string& outputString)
 {
-    for (int i = 0; i < inputString.length(); i++)
+    for (unsigned i = 0; i < inputString.length(); i++)
     {
         if (inputString[i] == 'T')
             inputString[i] = 'U';
@@ -90,7 +90,7 @@ void rna_amino_translate(string inputString, string& outputString)
     amino_map["UGC"] = 'C';
     amino_map["UGA"] = '*';
     amino_map["UGG"] = 'W';
-    for (int i = 0; i < inputString.length(); i +=3)
+    for (unsigned i = 0; i < inputString.length(); i +=3)
     {
         inputString.copy(buf, 3, i);
         if (amino_map[buf] != '*')

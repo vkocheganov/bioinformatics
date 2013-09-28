@@ -1,33 +1,16 @@
 #include <iostream>
 #include <fstream>
-#include <map>
+#include <vector>
 
 using namespace std;
 
-int main ()
+void pattern_matching(string inputPattern, string inputString, vector<int>& outputPoss)
 {
-    ifstream file("/home/maths/Downloads/Vibrio_cholerae.txt");
-    if (file.is_open())
+    for (int i = 0; i < inputString.length() - inputPattern.length() + 1; i++)
     {
-        string pattern("CTTGATCAT"), line;
-        // if (getline(file,pattern))
-        // {
-        //     cout << "got pattern " << pattern<< endl;
-        // }
-        if (getline(file,line))
+        if (inputString.compare(i,inputPattern.length(),inputPattern) == 0)
         {
-            cout << "got line " <<  " of size "<<line.length()<< endl;
+            outputPoss.push_back(i);
         }
-        for (int i = 0; i < line.length() - pattern.length() + 1; i++)
-        {
-            if (line.compare(i,pattern.length(),pattern) == 0)
-            {
-                cout <<i<<" ";
-            }
-        }
-    }
-    else
-    {
-        cout<<"Error opening file"<<endl;
     }
 }

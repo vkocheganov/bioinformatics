@@ -1,58 +1,43 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <vector>
 using namespace std;
 
-int main ()
+void freq_words(string inputString, int inputPatternSize, map<string,int>& OutputKMers)
 {
-//    ifstream file("/home/maths/Downloads/stepic_dataset.txt");
-    ifstream file("/home/maths/Documents/bioinf/rand_gene.txt");
-    if (file.is_open())
+    char *buffer = new char[inputPatternSize+1];
+   map<string,int> words;
+    for (int i = 0; i < inputString.length() - inputPatternSize + 1; i++)
     {
-        string line;
-        int length, k;
-        if (getline(file,line))
-        {
-            length = line.length();
-//            cout << "got line " << line<< endl << " of size " << length<<endl;
-        }
-        file >> k;
-        cout << "k = " << k <<endl;
-        char *buffer = new char[k+1];
-        map <string,int> words;
-
-        for (int i = 0; i < length - k + 1; i++)
-        {
-            line.copy(buffer,k,i);
-            buffer[k] = '\0';
+        inputString.copy(buffer,inputPatternSize,i);
+        buffer[inputPatternSize] = '\0';
 //            cout<< "trying: "<< buffer<< endl;
-            if (words.count(buffer) == 0)
-            {
-                words.insert(std::pair<string,int>(buffer,1));
-            }
-            else
-            {
-                words[buffer] += 1;
-            }
-        }
-        std::map<string,int>::iterator it = words.begin();
-        int max = 0;
-        for (it = words.begin(); it != words.end(); ++it)
+        if (words.count(buffer) == 0)
         {
-            if (it->second >= max)
-                max = it->second;
-//            cout << it->first << " => " << it->second << endl;
+            words.insert(std::pair<string,int>(buffer,1));
         }
-        cout << "The most frequent " << endl;
-        for (it = words.begin(); it != words.end(); ++it)
+        else
         {
-            if (it->second == max)
-                cout << it->first << " => "<<it->second << endl;
+            words[buffer] += 1;
         }
-
     }
-    else
+    std::map<string,int>::iterator it = words.begin();
+    int max = 0;
+    for (it = words.begin(); it != words.end(); ++it)
     {
-        cout<<"Error opening file"<<endl;
+        if (it->second >= max)
+            max = it->second;
+//            cout << it->first << " => " << it->second << endl;
+    }
+    for (it = words.begin(); it != words.end(); ++it)
+    {
+        if (it->second == max)
+        {
+            OutputKMers.insert(*it);
+            cout << it->first << " => "<<it->second << endl;
+        }
+        
     }
 }
+

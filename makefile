@@ -40,20 +40,20 @@
 # 	./freq_words_with_mism
 all: main run
 main: main.cpp reverse_complement_problem.o pattern_matching_problem.o clump_finding_problem.o minimum_skew_problem.o approximate_pattern_matching_problem.o freq_words_with_mism.o antibiotics.o
-	g++ -Wall -O0 -g main.cpp reverse_complement_problem.o pattern_matching_problem.o clump_finding_problem.o minimum_skew_problem.o approximate_pattern_matching_problem.o freq_words_with_mism.o antibiotics.o -o main
+	g++ -Wall -O3 -g main.cpp reverse_complement_problem.o pattern_matching_problem.o clump_finding_problem.o minimum_skew_problem.o approximate_pattern_matching_problem.o freq_words_with_mism.o antibiotics.o -o main1
 reverse_complement_problem.o: reverse_complement_problem.cpp
-	g++ -Wall -O0 -g -c reverse_complement_problem.cpp -o reverse_complement_problem.o
+	g++ -Wall -O3 -g -c reverse_complement_problem.cpp -o reverse_complement_problem.o
 pattern_matching_problem.o: pattern_matching_problem.cpp
-	g++ -Wall -O0 -g -c pattern_matching_problem.cpp -o pattern_matching_problem.o
+	g++ -Wall -O3 -g -c pattern_matching_problem.cpp -o pattern_matching_problem.o
 clump_finding_problem.o: clump_finding_problem.cpp
-	g++ -Wall -O0 -g -c clump_finding_problem.cpp -o clump_finding_problem.o
+	g++ -Wall -O3 -g -c clump_finding_problem.cpp -o clump_finding_problem.o
 minimum_skew_problem.o: minimum_skew_problem.cpp
-	g++ -Wall -O0 -g -c minimum_skew_problem.cpp -o minimum_skew_problem.o
+	g++ -Wall -O3 -g -c minimum_skew_problem.cpp -o minimum_skew_problem.o
 approximate_pattern_matching_problem.o: approximate_pattern_matching_problem.cpp
-	g++ -Wall -O0 -g -c approximate_pattern_matching_problem.cpp -o approximate_pattern_matching_problem.o
+	g++ -Wall -O3 -g -c approximate_pattern_matching_problem.cpp -o approximate_pattern_matching_problem.o
 freq_words_with_mism.o: freq_words_with_mism.cpp
-	g++ -Wall -O0 -g -c freq_words_with_mism.cpp -o freq_words_with_mism.o
+	g++ -Wall -O3 -g -c freq_words_with_mism.cpp -o freq_words_with_mism.o
 antibiotics.o: antibiotics.cpp
-	g++ -Wall -O0 -g -c antibiotics.cpp -o antibiotics.o
+	g++ -Wall -O3 -g -c antibiotics.cpp -o antibiotics.o
 run:
-	./main
+	./main1

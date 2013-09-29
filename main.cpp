@@ -12,7 +12,7 @@ int main ()
 {
     ifstream file("/home/maths/Downloads/stepic_dataset.txt");
     // ifstream file("/home/maths/Downloads/Vibrio_cholerae.txt");
-    // ifstream file("/home/maths/Downloads/E-coli.txt");
+     // ifstream file("/home/maths/Downloads/E-coli.txt");
     // ifstream file("/home/maths/Downloads/Thermotoga-petrophila.txt");
     // ifstream file("/home/maths/Downloads/Salmonella_enterica.fasta");
     // ifstream file("/home/maths/Documents/bioinf/rand_gene.txt");
@@ -83,7 +83,8 @@ int main ()
         // {
         //     cout<< *it<<" ";
         // }
-        int mass = 1024;
+//        int mass = 2000;
+        int mass = 8457;
         counting_peptides(mass);
         file.close();
     }

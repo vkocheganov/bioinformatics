@@ -4,7 +4,7 @@
 #include <vector>
 #include <set>
 #include "main.h"
-
+#include <boost/cstdint.hpp>
 using namespace std;
 
 void dna_rna_transcribe(string inputString, string& outputString)
@@ -171,6 +171,7 @@ void mass_map(map<char,int>& masses)
     masses['W'] = 186;
 }
 
+
 void generating_theoretical_spectrum(string inputPeptide, vector<int> &outputSpectrum)
 {
     string temp;
@@ -181,7 +182,7 @@ void generating_theoretical_spectrum(string inputPeptide, vector<int> &outputSpe
     {
         for (unsigned curstart = 0; curstart < inputPeptide.length(); curstart++)
         {
-            int sum = 0;
+            boost::uint64_t sum = 0;
             temp = "";
             unsigned curpostemp = curstart;
             for (unsigned curpos = 0; curpos < curlength; curpos++)
@@ -196,7 +197,7 @@ void generating_theoretical_spectrum(string inputPeptide, vector<int> &outputSpe
 //            cout <<"sum = "<< sum<<endl;
         }
     }
-    int sum = 0;
+    boost::uint64_t sum = 0;
     temp = "";
     unsigned curpostemp = 0;
     unsigned curlength = inputPeptide.length();
@@ -215,12 +216,12 @@ void generating_theoretical_spectrum(string inputPeptide, vector<int> &outputSpe
 
 #include <stdio.h>
 #include <time.h>
-int factorial(int n)
+boost::uint64_t factorial(boost::uint64_t n)
 {
   return (n == 1 || n == 0) ? 1 : factorial(n - 1) * n;
 }
-#include <boost/cstdint.hpp>
-boost::uint64_t Combinations(unsigned int n, unsigned int r)
+
+boost::uint64_t Combinations( boost::uint64_t n,  boost::uint64_t r)
 {
         if (r > n)
                 return 0;
@@ -236,22 +237,34 @@ boost::uint64_t Combinations(unsigned int n, unsigned int r)
 
         boost::uint64_t v = n--;
 
-        for (unsigned int i = 2; i < r + 1; ++i, --n)
+        for ( boost::uint64_t i = 2; i < r + 1; ++i, --n)
                 v = v * n / i;
 
         return v;
 }
-int counting_peptides_sub(int inputMass, vector<int>& masses, map<int, int>& cur_ar, int prev_mas)
+
+map<int, int> cur_ar;
+vector<int> masses, masses_double;
+boost::uint64_t counting_peptides_sub(int inputMass, int prev_mas)
 {
-    static int count = 0;
-    static clock_t t = clock();
+//    cout<<"inputMass "<<inputMass<<endl;
+    static boost::uint64_t count = 0;
+    bool found;
+    int temp = 1, total = 0;
+    map<int,int>::iterator it =  cur_ar.begin();
 //    cout<<"combinations = "<<Combinations(10,8)<<endl;
 //    cout<<"Entering mass "<<inputMass<<endl;
+//    static int count_size = 0;
     for (int i = prev_mas; i < masses.size(); i++)
     {
+//         if (cur_ar.size()== 1)
+//         {
+//             count_size++;
+// //            cout << "i= "<<i<<" size "<<cur_ar.size()<< " "<<count_size  <<endl;
+//         }
+        
         if (inputMass - masses[i] > 0)
         {
-            bool found;
             if (cur_ar.count(masses[i]) == 0)
             {
                 cur_ar[masses[i]] = 1;
@@ -262,14 +275,13 @@ int counting_peptides_sub(int inputMass, vector<int>& masses, map<int, int>& cur
                 cur_ar[masses[i]]++;
                 found = true;
             }
-            counting_peptides_sub(inputMass - masses[i], masses, cur_ar, i);
+            counting_peptides_sub(inputMass - masses[i], i);
             (found ? cur_ar[masses[i]]-- : cur_ar.erase(masses[i]));
 //            cur_ar.pop_back();
         }
         else if (inputMass - masses[i] == 0)
         {
 //            cur_ar.push_back(masses[i]);
-            bool found;
             if (cur_ar.count(masses[i]) == 0)
             {
                 cur_ar[masses[i]] = 1;
@@ -280,33 +292,29 @@ int counting_peptides_sub(int inputMass, vector<int>& masses, map<int, int>& cur
                 cur_ar[masses[i]]++;
                 found = true;
             }
-
-//             if (count % 1000000 == 0)
-//             {
-// //                cout << "Evrika! "<<count<<" time = "<< (float)(clock() - t)/CLOCKS_PER_SEC<<endl;
-//                 t = clock();
-//                 // for (vector<int>::iterator it1 = cur_ar.begin(); it1 != cur_ar.end(); it1++)
-//                 // {
-//                 //     cout<< *it1<<" ";
-//                 // }
-//                 // cout<<endl<<"end evrika\n";
-//             }
-            int temp = 0;
+            temp = 1, total = 0;
 //            count += factorial(cur_ar.size());
-//            for (int j = 0; j < cur_ar.size(); j++)
-            for (map<int,int>::iterator it = cur_ar.begin();it!= cur_ar.end(); it++)
+//            for (boost::uint64_t j = 0; j < cur_ar.size(); j++)
+            for (it = cur_ar.begin();it!= cur_ar.end(); it++)
             {
-                temp += it->second;
+                total += it->second;
                 //count += Combinations();
             }
-            cout<<" temp = "<<temp<<endl;
-            for (map<int,int>::iterator it = cur_ar.begin();it!= cur_ar.end(); it++)
+//            cout<<" total = "<<total<<endl;
+//            cout<<"Evrika"<<cur_ar.size()<<endl;
+            for ( it = cur_ar.begin();it!= cur_ar.end(); it++)
             {
+                // if ((it->first == 113) || (it->first == 128))
+                //     temp *= (1<<it->second);
                 //temp += it->second;
-                count += Combinations(temp, it->second);
-                temp -= it->second;
+                temp *= Combinations(total, it->second);;
+                total -= it->second;
+//                cout << it->first<< " "<<it->second<<endl;
             }
-
+            count += temp;
+//            cout<<"count = "<<count<<endl;
+            // if (count > 1000000000)
+            //     cout<< "exceeded\n";
 //            cur_ar.pop_back();
             (found ? cur_ar[masses[i]]-- : cur_ar.erase(masses[i]));
         }
@@ -315,27 +323,84 @@ int counting_peptides_sub(int inputMass, vector<int>& masses, map<int, int>& cur
     
 }
 
+vector<int> mas_array;
+static boost::uint64_t count = 0;
+boost::uint64_t iterations = 0;
+boost::uint64_t counting_peptides_sub1(int inputMass, int prev_mas)
+{
+    if (prev_mas == masses.size())
+        return 0;
+    bool found;
+    int temp = 1, total = 0;
+    int cur_mass = inputMass;
+    counting_peptides_sub1(cur_mass, prev_mas + 1);
+    mas_array[prev_mas] = 1;
+    cur_mass = cur_mass - mas_array[prev_mas] * masses[prev_mas];
+    while ( cur_mass > 0)
+    {
+        // if (iterations % 1000000000 == 0)
+        //     cout<<"iter = "<<iterations<<endl;
+        iterations++;
+        counting_peptides_sub1(cur_mass, prev_mas + 1);
+        mas_array[prev_mas]++;
+        cur_mass = cur_mass - masses[prev_mas];
+        // if (prev_mas == 11)
+        //     cout << " mas_array[prev_mas] = "<< mas_array[prev_mas]<<endl;
+    }
+
+    if (cur_mass == 0)
+    {
+        temp = 1, total = 0;
+        for (int i = 0; i < 18; i++)
+        {
+            total += mas_array[i];
+        }
+        for (int i = 0; i < 18; i++)
+        {
+            if (mas_array[i])
+                temp *= Combinations(total, mas_array[i]);;
+            total -= mas_array[i];
+        }
+
+        // for (it = cur_ar.begin();it!= cur_ar.end(); it++)
+        // {
+        //     total += it->second;
+        // }
+        // for ( it = cur_ar.begin();it!= cur_ar.end(); it++)
+        // {
+        //     if (it->second)
+        //         temp *= Combinations(total, it->second);;
+        //     total -= it->second;
+        // }
+        count += temp;
+    }
+    mas_array[prev_mas] = 0;
+//    cur_ar.erase(masses[prev_mas]);// = 0;
+    return count;
+    
+    
+}
+
 void counting_peptides(unsigned inputMass)
 {
+    clock_t t = clock();
     set<int> massSet;
     map<char,int> massMap;
     mass_map(massMap);
     for (map<char,int>::iterator it = massMap.begin(); it != massMap.end();it++)
     {
         massSet.insert(it->second);
-//        cout<<it->second<<" ";
     }
-//    cout<<endl;
     cout<<"mass = "<<inputMass<<endl;
-    map<int,int> cur_ar;
-    vector<int> massvec;
-    for (map<char,int>::iterator it = massMap.begin(); it != massMap.end();it++)
+    for (set<int>::iterator it = massSet.begin(); it != massSet.end();it++)
     {
-        massvec.push_back(it->second);
-//        cout<<it->second<<" ";
+        masses.push_back(*it);
     }
-
-    cout << "count = "<<counting_peptides_sub(inputMass, massvec, cur_ar,0)<<endl;
+    for (int i = 0 ; i < 18 ; i ++)
+        mas_array.push_back(0);
+    
+    cout << "count = "<<counting_peptides_sub1(inputMass, 0)<<endl;
+    cout <<" time = "<<((double(clock()) - t))/CLOCKS_PER_SEC<<endl;
 }
 
 

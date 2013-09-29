@@ -13,3 +13,5 @@ void generate_comb(int n, int k, vector<int>& combinations);
 void freq_words_with_mism(string inputString, int inputK, int inputD, vector<string>& outputMaxPat);
 void protein_translation(string inputString, string& outputString);
 void peptide_encoding(string inputDNA, string inputAmino, vector<string>& outputSubstrings);
+void generating_theoretical_spectrum(string inputPeptide, vector<int> &outputSpectrum);
+void counting_peptides(unsigned inputMass);

@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 #include "main.h"
@@ -18,15 +19,15 @@ int main ()
     if (file.is_open())
     {
         string line, pattern("CTTGATCAT"), temp;
-        while( !file.eof() ) {
-            temp =file.get();
-            line.append(temp);
-        }
-        cout <<"length = "<< line.length()<<endl;
+        // while( !file.eof() ) {
+        //     temp =file.get();
+        //     line.append(temp);
+        // }
+        // cout <<"length = "<< line.length()<<endl;
 //        cout<<line;
 //        getline(file,line);
 //        getline(file,pattern);
-        pattern = "VKLFPWFNGY";
+//        pattern = "VKLFPWFNGY";
         int d, k;
         // file>>k;
         // cout <<sizeof(int)+1<<endl;
@@ -68,15 +69,22 @@ int main ()
         // }
         // cout<<endl;
 //        cout<<positions<<endl;
-        vector<string> substrings;
-        peptide_encoding(line,pattern,substrings);
-        cout <<"being "<<endl;
-        for (vector<string>::iterator it = substrings.begin(); it != substrings.end(); it++)
-        {
-            cout<<*it<<" ";
-        }
-
-        
+        // vector<string> substrings;
+        // peptide_encoding(line,pattern,substrings);
+        // cout <<"being "<<endl;
+        // for (vector<string>::iterator it = substrings.begin(); it != substrings.end(); it++)
+        // {
+        //     cout<<*it<<" ";
+        // }
+        // vector<int> spectrum;
+        // generating_theoretical_spectrum(line,spectrum);
+        // std::sort (spectrum.begin(), spectrum.end());
+        // for (vector<int>::iterator it = spectrum.begin(); it != spectrum.end(); it++)
+        // {
+        //     cout<< *it<<" ";
+        // }
+        int mass = 1024;
+        counting_peptides(mass);
         file.close();
     }
     else

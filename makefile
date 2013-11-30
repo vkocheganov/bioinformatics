@@ -39,8 +39,8 @@
 # run:
 # 	./freq_words_with_mism
 all: main run
-main: main.cpp reverse_complement_problem.o pattern_matching_problem.o clump_finding_problem.o minimum_skew_problem.o approximate_pattern_matching_problem.o freq_words_with_mism.o antibiotics.o
-	g++ -Wall -O3 -g main.cpp reverse_complement_problem.o pattern_matching_problem.o clump_finding_problem.o minimum_skew_problem.o approximate_pattern_matching_problem.o freq_words_with_mism.o antibiotics.o -o main1
+main: new_main.cpp reverse_complement_problem.o pattern_matching_problem.o clump_finding_problem.o minimum_skew_problem.o approximate_pattern_matching_problem.o freq_words_with_mism.o antibiotics.o motif_finding.o
+	g++ -Wall -O0 -g new_main.cpp reverse_complement_problem.o pattern_matching_problem.o clump_finding_problem.o minimum_skew_problem.o approximate_pattern_matching_problem.o freq_words_with_mism.o antibiotics.o motif_finding.o -o main1
 reverse_complement_problem.o: reverse_complement_problem.cpp
 	g++ -Wall -O3 -g -c reverse_complement_problem.cpp -o reverse_complement_problem.o
 pattern_matching_problem.o: pattern_matching_problem.cpp
@@ -54,6 +54,8 @@ approximate_pattern_matching_problem.o: approximate_pattern_matching_problem.cpp
 freq_words_with_mism.o: freq_words_with_mism.cpp
 	g++ -Wall -O3 -g -c freq_words_with_mism.cpp -o freq_words_with_mism.o
 antibiotics.o: antibiotics.cpp
-	g++ -Wall -O3 -g -c antibiotics.cpp -o antibiotics.o
+	g++ -Wall -O0 -g -c antibiotics.cpp -o antibiotics.o
+motif_finding.o: motif_finding.cpp
+	g++ -Wall -O0 -g -c motif_finding.cpp -o motif_finding.o
 run:
 	./main1

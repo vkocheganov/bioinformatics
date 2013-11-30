@@ -19,10 +19,27 @@ int main ()
     if (file.is_open())
     {
         string line, pattern("CTTGATCAT"), temp;
-        // while( !file.eof() ) {
-        //     temp =file.get();
-        //     line.append(temp);
-        // }
+        vector<int> spectrum;
+        int temp_int;
+        int N;
+        int M;
+        file >> M;
+        file >> N;
+        cout <<"M = "<<M<<" N = "<<N<<endl;
+        file >> temp_int;
+        while( !file.eof() ) {
+            spectrum.push_back(temp_int);
+            cout << temp_int<< " ";
+            file >> temp_int;
+        }
+        cout<<endl;
+        cout<<"spectrum size = "<<spectrum.size()<<endl;;
+//        cout<<endl;
+//        cout<<"size = "<<spectrum.size();
+//        spectralConvolutionProblem(spectrum);
+//        leaderBoardCyclopeptideSequencing(N,spectrum);
+        ConvolutionCyclopeptideSequencing(M, N, spectrum);
+//        cycloPeptideSequencing(spectrum);
         // cout <<"length = "<< line.length()<<endl;
 //        cout<<line;
 //        getline(file,line);
@@ -83,9 +100,14 @@ int main ()
         // {
         //     cout<< *it<<" ";
         // }
-//        int mass = 2000;
-        int mass = 8457;
-        counting_peptides(mass);
+        int mass = 9433;
+//        int mass = 9210;
+        
+//       for (int mass = 200; mass < 300; mass++)
+        {
+//            counting_peptides(mass);
+        }
+        
         file.close();
     }
     else
